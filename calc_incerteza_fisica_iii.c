@@ -10,22 +10,23 @@ int main(){
     ug = sqrt(pow((0.01/0.0628),2.0) + pow(((0.62*0.0019)/(0.0628*0.0628)),2.0));
     printf("Gravidade   = %f\n",g);
     printf("Incerteza g = %f\n",ug);
-
+    //area
     uA = sqrt(pow((0.01/0.0628)*u,2.0));
     A = M_PI * pow((D/2),2.0);
 
     printf("Area      = %f\n",A);
     printf("Incerteza A = %f\n",uA);
-
+    //incerteza volume
     for(int i = 0;i<4;i++){
-        uV[i] = sqrt( pow( (((pow(D,2.0)) * M_PI * u )/4) , 2.0) + pow( ( (2 * D * M_PI * u * h[i])/4) , 2.0) );
-        printf("u(V) (h(%f)) = %f",h[i],uV[i] * 1000000000);
+        uV[i] = sqrt( pow( (((pow(D,2.0)) * M_PI * u )/4) , 2.0) + pow( ( (D * M_PI * u * h[i])/2) , 2.0) );
+        printf("u(V) (h(%.3f)) = %lf",h[i],uV[i]);
         printf("\n");
     }
+    //volume
     printf("\n");
     for(int i = 0;i<4;i++){
-        V[i] = (((D/2)*(D/2))*M_PI)*h[i];
-        printf("V (h(%f)) = %f",h[i],V[i] * 1000000000);
+        V[i] = ((D*D)/4)* M_PI*h[i];
+        printf("V (h(%.3f)) = %lf",h[i],V[i]);
         printf("\n");
     }
     printf("\n");
@@ -33,35 +34,33 @@ int main(){
     for(int i=0;i<4;i++){
         E = P - P_l[i];
         p = E/(g*V[i]);
-        up = sqrt( pow(( uE/V[i] ),2.0) + pow(( (E*uV[i])/(V[i]*V[i]) ),2.0));
-        printf("p (h(%f)) = %f",h[i],p/1000);
+        printf("p (h(%.3f)) = %lf",h[i],p);
         ros[i] = p;
         printf("\n");
     }
     printf("\n");
     for(int i=0;i<4;i++){
         E = P - P_l[i];
-        p = E/(g*V[i]);
-        up = sqrt( pow(( uE/V[i] ),2.0) + pow(( (E*uV[i])/(V[i]*V[i]) ),2.0));
-        printf("up (h(%f)) = %f",h[i],up/10000);
+        up = sqrt( pow(( uE/g*V[i] ),2.0) + pow(( (E*uV[i])/(g*V[i]*V[i]) ),2.0));
+        printf("up (h(%.3f)) = %lf",h[i],up);
         uros[i] = up;
         printf("\n");
     }
     for(int i=0;i<4;i++){
-        printf("Densidade min: %f e max: %f", ros[i]/1000 - uros[i]/10000, ros[i]/1000 + uros[i]/10000);
+        printf("Densidade min: %f e max: %lf", ros[i] - uros[i], ros[i] + uros[i]);
         printf("\n");
     }
     printf("\n\n-------------------------------------------------\nAbaixo, calculos com valores fornecidos\n\n");
 
     for(int i = 0;i<4;i++){
-        uV[i] = sqrt( pow( (((pow(D,2.0)) * M_PI * u_prof )/4) , 2.0) + pow( ( (2 * D * M_PI * u_prof * h_prof[i])/4) , 2.0) );
-        printf("u(V) (h(%f)) = %f",h_prof[i],uV[i] * 1000000000);
+        uV[i] = sqrt( pow( (((pow(D,2.0)) * M_PI * u_prof )/4) , 2.0) + pow( ( (D * M_PI * u_prof * h_prof[i])/2) , 2.0) );
+        printf("u(V) (h(%.3f)) = %lf",h_prof[i],uV[i]);
         printf("\n");
     }
     printf("\n");
     for(int i = 0;i<4;i++){
-        V[i] = (((D/2)*(D/2))*M_PI)*h_prof[i];
-        printf("V (h(%f)) = %f",h_prof[i],V[i] * 1000000000);
+        V[i] = ((D*D)/4)* M_PI*h_prof[i];
+        printf("V (h(%.3f)) = %lf",h_prof[i],V[i]);
         printf("\n");
     }
     printf("\n");
@@ -69,22 +68,22 @@ int main(){
     for(int i=0;i<4;i++){
         E = P - P_l[i];
         p = E/(g*V[i]);
-        up = sqrt( pow(( uE/V[i] ),2.0) + pow(( (E*uV[i])/(V[i]*V[i]) ),2.0));
-        printf("p (h(%f)) = %f",h_prof[i],p);
+        printf("p (h(%.3f)) = %lf",h_prof[i],p);
         ros[i] = p;
         printf("\n");
     }
     printf("\n");
+
     for(int i=0;i<4;i++){
         E = P - P_l[i];
-        p = E/(g*V[i]);
-        up = sqrt( pow(( uE/V[i] ),2.0) + pow(( (E*uV[i])/(V[i]*V[i]) ),2.0));
-        printf("up (h(%f)) = %f",h_prof[i],up);
+        up = sqrt( pow(( uE/(g*V[i]) ),2.0) + pow(( (E*uV[i])/(g*V[i]*V[i]) ),2.0));
+        printf("up (h(%.3f)) = %lf",h_prof[i],up);
         uros[i] = up;
         printf("\n");
     }
+
     for(int i=0;i<4;i++){
-        printf("Densidade min: %f e max: %f", ros[i] - uros[i], ros[i] + uros[i]);
+        printf("Densidade min: %f e max: %lf", ros[i] - uros[i], ros[i] + uros[i]);
         printf("\n");
     }
 }
